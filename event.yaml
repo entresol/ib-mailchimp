@@ -1,0 +1,34 @@
+# Neudenkertreffen – Monatliche Veranstaltung
+# Dieses File wird pro Treffen einmalig befüllt und kann danach archiviert werden.
+
+typ: einladung  # einladung | erinnerung
+
+betreff: "[neudenken] Einladung zum Neudenkertreffen am 17. April im NKubator"
+vorschautext: "Frühling auf AEG: Der nkubator verbindet Gründergeist mit Uni-Infrastruktur – und das auf einem Gelände mit Industriegeschichte."
+
+# Einstiegstext nach "Kia ora," – 2-3 Sätze, Stimmung/Kontext des Ortes
+intro: >
+  der April führt uns Auf AEG zu Andrea in den NKubator - Nürnbergs Gründerzentrum für
+  Energie, GreenTech und Nachhaltigkeit. Eingebettet in Uni-Forschung und Werkstattflair.
+  Ein Ort, an dem Ideen nicht nur gedacht, sondern gebaut werden.
+
+# Datum und Uhrzeit
+datum_zeile: "am Freitag, den 17. April von 13 bis 15 Uhr im"
+
+# Ort
+ort_name: "NKubator"
+adresse: |
+  Fürther Straße 246b
+  Eingang 7 (FAPS Lehrstuhl)
+  90429 Nürnberg
+ort_url: "http://nkubator.de/"
+
+# Wegbeschreibung und Programm (ein Block)
+wegweiser_und_programm: >
+  Du findest über die Fürther Straße 246 ins Ziel: Durchgang D, dann links Richtung
+  Durchgang C. Vor dem Parkhaus links abbiegen: Eingang 7. Im ersten Stock durch das
+  FAPS Foyer, dort geradeaus die Zwischentreppe hoch.
+
+  Ab 13 Uhr wartet im Living Lab ein kleiner Lunch auf dich - eine gute Gelegenheit,
+  mit dem NKubator und den Startups direkt ins Gespräch zu kommen. Gegen 14 Uhr starten
+  wir eine Haustour.
