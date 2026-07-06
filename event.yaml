@@ -1,34 +1,43 @@
 # Neudenkertreffen – Monatliche Veranstaltung
-# Dieses File wird pro Treffen einmalig befüllt und kann danach archiviert werden.
+# Standard-Format für ein einzelnes Treffen.
+# Für Flowing Invitation (NDF etc.): typ: flowing + events[] + cta_text/cta_url befüllen.
 
-typ: einladung  # einladung | erinnerung
+typ: einladung  # einladung | erinnerung | flowing
 
-betreff: "[neudenken] Einladung zum Neudenkertreffen am 17. April im NKubator"
-vorschautext: "Frühling auf AEG: Der nkubator verbindet Gründergeist mit Uni-Infrastruktur – und das auf einem Gelände mit Industriegeschichte."
+betreff: "[neudenken] Einladung zum Neudenkertreffen am DD. Monat im Ort"
+vorschautext: "Kurzer Vorschautext – erscheint in der Inbox-Vorschau des Mailclients."
 
-# Einstiegstext nach "Kia ora," – 2-3 Sätze, Stimmung/Kontext des Ortes
-intro: >
-  der April führt uns Auf AEG zu Andrea in den NKubator - Nürnbergs Gründerzentrum für
-  Energie, GreenTech und Nachhaltigkeit. Eingebettet in Uni-Forschung und Werkstattflair.
-  Ein Ort, an dem Ideen nicht nur gedacht, sondern gebaut werden.
+# Hero-Sektion (monatlich wechselnd)
+greeting: "Hola,"         # Begrüßung auf Zeit — jede Sprache möglich
+subtitle: "Untertitel"    # Kursiv, orange — Stimmung/Thema des Monats
 
-# Datum und Uhrzeit
-datum_zeile: "am Freitag, den 17. April von 13 bis 15 Uhr im"
+# Einleitungstext — eine Liste von Absätzen
+intro:
+  - "Erster Absatz. Stimmung des Orts, warum wir dort hingehen."
+  - "Zweiter Absatz (optional). Kontext, Besonderheit."
 
-# Ort
-ort_name: "NKubator"
-adresse: |
-  Fürther Straße 246b
-  Eingang 7 (FAPS Lehrstuhl)
-  90429 Nürnberg
-ort_url: "http://nkubator.de/"
+# Haupt-Event — immer vorhanden
+main_event:
+  eyebrow: "Fr, DD. Monat · HH–HH Uhr · Ortsname"
+  title: "Ortsname"
+  url: "https://ortswebsite.de/"
+  description: "Ein bis zwei Sätze: Was erwartet die Teilnehmer? Was ist besonders?"
 
-# Wegbeschreibung und Programm (ein Block)
-wegweiser_und_programm: >
-  Du findest über die Fürther Straße 246 ins Ziel: Durchgang D, dann links Richtung
-  Durchgang C. Vor dem Parkhaus links abbiegen: Eingang 7. Im ersten Stock durch das
-  FAPS Foyer, dort geradeaus die Zwischentreppe hoch.
+# Weitere Events — nur bei Flowing Invitation
+events: []
+# Beispiel:
+# events:
+#   - eyebrow: "Di, DD. Monat · HH Uhr · Ort"
+#     title: "Event-Titel"
+#     url: "https://..."
+#     description: "Kurze Beschreibung."
 
-  Ab 13 Uhr wartet im Living Lab ein kleiner Lunch auf dich - eine gute Gelegenheit,
-  mit dem NKubator und den Startups direkt ins Gespräch zu kommen. Gegen 14 Uhr starten
-  wir eine Haustour.
+# CTA-Link — nur bei Flowing Invitation (wenn events befüllt)
+cta_text: ""
+cta_url:  ""
+
+# Abschlusstext — leer lässt den Standardtext stehen
+closing: ""
+
+# Team — alphabetisch, mit & vor dem letzten Namen
+team: "Doro, Florian, Hanna, Ingo, Simon, Sonja, Stefan, Stefan & Thor"
