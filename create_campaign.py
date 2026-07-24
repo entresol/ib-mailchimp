@@ -11,6 +11,7 @@ Verwendung:
 import os
 import sys
 import html as htmllib
+import base64
 import argparse
 from pathlib import Path
 
@@ -58,6 +59,16 @@ def api(method, path, **kwargs):
         sys.exit(1)
     return resp.json() if resp.content else {}
 
+def upload_image(image_path):
+    """Lädt ein lokales Bild in den Mailchimp File Manager und gibt die CDN-URL zurück."""
+    path = Path(image_path)
+    img_b64 = base64.b64encode(path.read_bytes()).decode()
+    result = api("POST", "file-manager/files", json={
+        "name": path.name,
+        "file_data": img_b64,
+    })
+    return result["full_size_url"]
+
 # --- HTML-Generierung --------------------------------------------------------
 
 def h(text):
@@ -89,24 +100,61 @@ def render_intro_paragraphs(paragraphs):
     return "\n      ".join(parts)
 
 def render_hero_event(ev):
-    title_inner = (
-        f'<a href="{h(ev["url"])}" target="_blank" '
-        f'style="color: #3a3938; text-decoration: none;">{h(ev["title"])}</a>'
-        if ev.get("url") else h(ev["title"])
-    )
+    """Hero-Event: kompakt (eyebrow) oder erweitert (date/time/location_name/location_address)."""
+
+    # Erweitertes Layout: Location als Hauptüberschrift, Datum/Zeit im Eyebrow
+    if ev.get("location_name"):
+        date  = ev.get("date", "")
+        time  = ev.get("time", "")
+        eyebrow_text = f"{date} · {time}" if date and time else date or time
+        loc_name = h(ev["location_name"])
+        loc_addr = h(ev.get("location_address", ""))
+        loc_url  = ev.get("location_url", "")
+        loc_inner = (
+            f'<a href="{h(loc_url)}" target="_blank" '
+            f'style="color: #3a3938; text-decoration: none;">{loc_name}</a>'
+            if loc_url else loc_name
+        )
+        rows = (
+            f'    <p style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 14px; '
+            f'font-weight: 500; color: #f2901c; margin: 0 0 6px; letter-spacing: 1px; '
+            f'text-transform: uppercase;">{h(eyebrow_text)}</p>\n'
+            f'    <p style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 36px; '
+            f'font-weight: 400; color: #3a3938; margin: 0 0 8px; letter-spacing: -0.8px; '
+            f'line-height: 1.15;">{loc_inner}</p>\n'
+        )
+        if loc_addr:
+            rows += (
+                f'    <p style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 13px; '
+                f'color: #6b6967; margin: 0 0 10px; font-weight: 300;">{loc_addr}</p>\n'
+            )
+        rows += (
+            f'    <p style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 14px; '
+            f'color: #6b6967; margin: 0; line-height: 1.75; font-weight: 300;">{h(ev["description"])}</p>\n'
+        )
+    else:
+        # Kompaktes Eyebrow-Layout (Standard für Flowing Invitation)
+        title_inner = (
+            f'<a href="{h(ev["url"])}" target="_blank" '
+            f'style="color: #3a3938; text-decoration: none;">{h(ev["title"])}</a>'
+            if ev.get("url") else h(ev["title"])
+        )
+        rows = (
+            f'    <p style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 11px; '
+            f'font-weight: 400; color: #f2901c; margin: 0 0 6px; letter-spacing: 1.5px; '
+            f'text-transform: uppercase;">{h(ev.get("eyebrow", ""))}</p>\n'
+            f'    <p style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 36px; '
+            f'font-weight: 400; color: #3a3938; margin: 0 0 8px; letter-spacing: -0.8px; '
+            f'line-height: 1.15;">{title_inner}</p>\n'
+            f'    <p style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 14px; '
+            f'color: #6b6967; margin: 0; line-height: 1.75; font-weight: 300;">{h(ev["description"])}</p>\n'
+        )
+
     return (
         '<table width="100%" border="0" cellpadding="0" cellspacing="0" '
         'style="margin-bottom: 32px;">\n'
         "  <tr><td>\n"
-        f'    <p style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 11px; '
-        f'font-weight: 400; color: #f2901c; margin: 0 0 6px; letter-spacing: 1.5px; '
-        f'text-transform: uppercase;">{h(ev["eyebrow"])}</p>\n'
-        f'    <p style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 36px; '
-        f'font-weight: 400; color: #3a3938; margin: 0 0 8px; letter-spacing: -0.8px; '
-        f'line-height: 1.15;">{title_inner}</p>\n'
-        f'    <p style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 14px; '
-        f'color: #6b6967; margin: 0; line-height: 1.75; '
-        f'font-weight: 300;">{h(ev["description"])}</p>\n'
+        + rows +
         "  </td></tr>\n"
         "</table>"
     )
@@ -145,22 +193,53 @@ def render_cta(text, url):
         "</table>"
     )
 
-def build_events_section(ev):
+def build_main_event_html(ev):
+    """Hauptevent (grauer Hintergrund) + optionaler CTA."""
     parts = [render_hero_event(ev["main_event"])]
-    for extra in ev.get("events") or []:
-        parts.append(DIVIDER)
-        parts.append(render_compact_event(extra))
     if ev.get("cta_text") and ev.get("cta_url"):
         parts.append(render_cta(ev["cta_text"], ev["cta_url"]))
     return "\n".join(parts)
 
-def generate_html(ev):
-    greeting        = ev.get("greeting", "Hola,")
-    subtitle        = ev.get("subtitle", "")
-    intro           = ev.get("intro", [])
-    closing         = ev.get("closing") or DEFAULT_CLOSING
-    team            = ev.get("team", "Das Neudenkertreffen-Team")
-    events_section  = build_events_section(ev)
+def build_extra_events_html(ev):
+    """Zusätzliche Event-Kacheln (weißer Hintergrund, eigene Section)."""
+    extra = ev.get("events") or []
+    if not extra:
+        return ""
+    parts = []
+    for i, event in enumerate(extra):
+        if i > 0:
+            parts.append(DIVIDER)
+        parts.append(render_compact_event(event))
+    return "\n".join(parts)
+
+def generate_html(ev, image_url=None):
+    greeting         = ev.get("greeting", "Hola,")
+    subtitle         = ev.get("subtitle", "")
+    intro            = ev.get("intro", [])
+    closing          = ev.get("closing") or DEFAULT_CLOSING
+    team             = ev.get("team", "Das Neudenkertreffen-Team")
+    main_event_html  = build_main_event_html(ev)
+    extra_events_html = build_extra_events_html(ev)
+
+    image_section = ""
+    if image_url:
+        image_section = f"""
+  <!-- IMAGE -->
+  <tr>
+    <td bgcolor="#ffffff" style="padding: 0; line-height: 0; font-size: 0;">
+      <img src="{h(image_url)}" width="600" alt="" style="display:block; width:100%; max-width:600px; height:auto;">
+    </td>
+  </tr>"""
+
+    extra_section = ""
+    if extra_events_html:
+        extra_section = f"""
+  <!-- EXTRA EVENTS -->
+  <tr>
+    <td bgcolor="#ffffff" style="padding: 72px 40px 0;" class="pad">
+{extra_events_html}
+    </td>
+  </tr>"""
 
     return f"""\
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -170,7 +249,7 @@ def generate_html(ev):
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>*|MC:SUBJECT|*</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;1,300;1,400&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet" type="text/css">
   <style type="text/css">
     body, #bodyTable {{ margin: 0; padding: 0; width: 100%; background-color: #f0eeeb; font-family: 'Plus Jakarta Sans', Arial, sans-serif; }}
     p, a, span, td {{ font-family: 'Plus Jakarta Sans', Arial, sans-serif; }}
@@ -198,7 +277,7 @@ def generate_html(ev):
       <table width="100%" border="0" cellpadding="0" cellspacing="0">
         <tr>
           <td valign="middle">
-            <a href="https://innovationsbeirat.de/" target="_blank" style="text-decoration: none;"><span style="font-family: 'Open Sans', Arial, sans-serif; font-size: 21px; font-weight: 500; color: #f2901c; letter-spacing: 0;">neu.</span><span style="font-family: 'Open Sans', Arial, sans-serif; font-size: 21px; font-weight: 400; color: #3a3938; letter-spacing: 0;">denken</span></a>
+            <a href="https://innovationsbeirat.de/" target="_blank" style="text-decoration: none;"><span style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 21px; font-weight: 600; color: #f2901c; letter-spacing: 0;">neu.</span><span style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 21px; font-weight: 400; color: #3a3938; letter-spacing: 0;">denken</span></a>
           </td>
           <td align="right" valign="middle">
             <a href="*|ARCHIVE|*" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 10px; color: #bbbbbb; text-decoration: none; letter-spacing: 0.5px;">Im Browser ansehen</a>
@@ -212,7 +291,7 @@ def generate_html(ev):
   <tr>
     <td bgcolor="#ffffff" style="padding: 40px 40px 0;" class="pad">
       <p class="hero-text" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 72px; font-weight: 200; color: #3a3938; margin: 0; letter-spacing: -3px; line-height: 1.0;">{h(greeting)}</p>
-      <p class="hero-sub" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 26px; font-weight: 300; font-style: italic; color: #f2901c; margin: 24px 0 0; letter-spacing: -0.5px; line-height: 1.2;">{h(subtitle)}</p>
+      <p class="hero-sub" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 18px; font-weight: 300; font-style: italic; color: #f2901c; margin: 16px 0 0; letter-spacing: 0; line-height: 1.3;">{h(subtitle)}</p>
     </td>
   </tr>
 
@@ -223,13 +302,14 @@ def generate_html(ev):
     </td>
   </tr>
 
-  <!-- EVENTS -->
+  <!-- MAIN EVENT -->
   <tr>
     <td bgcolor="#f7f6f4" style="padding: 36px 40px 40px;" class="pad">
-{events_section}
+{main_event_html}
     </td>
   </tr>
-
+{image_section}
+{extra_section}
   <!-- CLOSING -->
   <tr>
     <td bgcolor="#ffffff" style="padding: 40px 40px 0;" class="pad">
@@ -283,7 +363,20 @@ def generate_html(ev):
 # --- Kampagne erstellen ------------------------------------------------------
 
 def create_campaign(ev, dry_run=False):
-    generated_html = generate_html(ev)
+    yaml_dir = Path(ev.get("_yaml_dir", "."))
+    image_url = None
+
+    if ev.get("image"):
+        image_path = yaml_dir / ev["image"]
+        if dry_run:
+            # Relative Pfad für lokale Browser-Vorschau
+            image_url = str(image_path)
+        else:
+            print(f"Lade Bild hoch: {image_path.name}...")
+            image_url = upload_image(image_path)
+            print(f"Bild-URL: {image_url}")
+
+    generated_html = generate_html(ev, image_url=image_url)
 
     print(f"\nBetreff:  {ev['betreff']}")
     print(f"Greeting: {ev.get('greeting', '—')}")
@@ -303,6 +396,7 @@ def create_campaign(ev, dry_run=False):
     print("Aktualisiere Einstellungen...")
     api("PATCH", f"campaigns/{campaign_id}", json={
         "settings": {
+            "title": ev["betreff"],
             "subject_line": ev["betreff"],
             "preview_text": ev.get("vorschautext", ""),
             "from_name": "Stefan Probst",
@@ -338,6 +432,7 @@ def main():
         sys.exit(1)
 
     ev = yaml.safe_load(event_path.read_text(encoding="utf-8"))
+    ev["_yaml_dir"] = str(event_path.parent.resolve())
     campaign_id = create_campaign(ev, dry_run=args.dry_run)
 
     if campaign_id and args.test_email:

@@ -1,0 +1,34 @@
+typ: einladung
+
+betreff: "[neudenken] Einladung zum Neudenkertreffen am Freitag, den 17. Juli im CodeCamp:N"
+vorschautext: "Velvet-Sofas, Pop-Art-Poster, Backsteinwände — und ein Billardtisch als Backup-Meetingroom."
+
+greeting: "Selamat pagi,"
+subtitle: "Neudenkertreffen im CodeCamp:N"
+
+intro:
+  - "nach einem grandiosen Nürnberg Digital Festival finden wir uns im Juli beim CodeCamp:N zusammen: Velvet-Sofas, Pop-Art-Poster, Backsteinwände und ein Billardtisch als Backup-Meetingroom. Wie maßgeschneidert."
+  - "Was wenige wissen: Das CodeCamp:N begann als ein digitales Inkubator-Projekt der NÜRNBERGER Versicherung — und hat sich seitdem konsequent selbst neu erfunden."
+  - "Wie immer: Kein Programm, keine Agenda, Free Flow. Kommt vorbei, taucht in die Gespräche ein und bringt die Menschen mit, die ihr schon lange einladen wolltet."
+
+main_event:
+  date: "Fr, 17. Juli"
+  time: "13–15 Uhr"
+  location_name: "CodeCamp:N"
+  location_url: "https://www.codecamp-n.com/"
+  location_address: "Solgerstraße 18, 90429 Nürnberg"
+  description: "Unser offenes Neudenkertreffen. Kurze Anmeldung vorab hilft uns bei der Planung — einfach an open@innovationsbeirat.de."
+
+events:
+  - eyebrow: "Nürnberg Digital Festival 2026"
+    title: "Rückblick: Opening"
+    url: "https://youtu.be/dcsrrwEQQKM"
+    description: "Neil Harbisson, Christian Kroll & Dr. Judit Klein — die Eröffnungs-Keynotes des Nürnberg Digital Festival."
+cta_text: ""
+cta_url: ""
+
+image: raw/codecamp-n.jpeg
+
+closing: "Wir freuen uns auf euch — und auf alles, was entsteht, wenn die richtigen Menschen im selben Raum sind."
+
+team: "Annika, Doro, Hanna, Sebastian, Stefan, Stefan & Thor"

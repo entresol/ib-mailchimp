@@ -1,0 +1,28 @@
+typ: einladung
+
+betreff: "[neudenken] Einladung zum Neudenkertreffen am Freitag, den 21. August in Doros Garten"
+vorschautext: "Viel Grün, etwas Kühles im Glas und Neudenken in der Nürnberger Nordstadt."
+
+greeting: "Habari za mchana,"
+subtitle: "Neudenkertreffen in Doros Garten"
+
+intro:
+  - "im August sind wir bei Doro zu Gast. Ihr Garten öffnet sich für uns mit viel Grün und etwas Kühlem im Glas. Ein Ort zum Ankommen, Durchatmen und Neudenken in der Nürnberger Nordstadt."
+  - "Diesmal drehen wir an der Uhr und treffen uns nachmittags. Sommerlicht, entspannte Runde — bei plötzlichem Wintereinbruch wechseln wir vor den Kamin ;-)"
+  - "Wie immer: Kein Programm, keine Agenda, Free Flow. Kommt vorbei, taucht in die Gespräche ein und bringt die Menschen mit, die ihr schon lange dazu einladen wolltet."
+
+main_event:
+  date: "Fr, 21. August"
+  time: "15–17 Uhr"
+  location_name: "Doros Garten"
+  location_url: ""
+  location_address: "Grolandstr. 70, 90408 Nürnberg"
+  description: "Gespräche auf Augenhöhe, barfuß im Gras ausdrücklich erlaubt. Eine kurze Anmeldung vorab hilft uns beim Planen."
+
+events: []
+cta_text: ""
+cta_url: ""
+
+closing: "Wir freuen uns auf euch — denn die besten Dinge entstehen, wenn Menschen, Ort und Moment die richtigen sind."
+
+team: "Annika, Doro, Hanna, Stefan, Stefan & Thor"
