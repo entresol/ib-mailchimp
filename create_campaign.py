@@ -212,8 +212,21 @@ def build_extra_events_html(ev):
         parts.append(render_compact_event(event))
     return "\n".join(parts)
 
+def hero_type_scale(greeting):
+    """Hero-Schriftgrad nach Länge - 72px sprengt bei langen Begrüßungen die 600px.
+
+    Liefert (Desktop-Größe, Desktop-Tracking, Mobil-Größe, Mobil-Tracking).
+    """
+    n = len(greeting)
+    if n <= 8:
+        return 72, -3, 52, -2
+    if n <= 14:
+        return 52, -2, 38, -1.5
+    return 40, -1.5, 30, -1
+
 def generate_html(ev, image_url=None):
     greeting         = ev.get("greeting", "Hola,")
+    hero_size, hero_track, hero_size_m, hero_track_m = hero_type_scale(greeting)
     subtitle         = ev.get("subtitle", "")
     intro            = ev.get("intro", [])
     closing          = ev.get("closing") or DEFAULT_CLOSING
@@ -258,7 +271,7 @@ def generate_html(ev, image_url=None):
     a {{ -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }}
     @media only screen and (max-width: 620px) {{
       .email-container {{ width: 100% !important; }}
-      .hero-text {{ font-size: 52px !important; letter-spacing: -2px !important; }}
+      .hero-text {{ font-size: {hero_size_m}px !important; letter-spacing: {hero_track_m}px !important; }}
       .hero-sub {{ font-size: 22px !important; }}
       .pad {{ padding: 36px 28px !important; }}
     }}
@@ -290,7 +303,7 @@ def generate_html(ev, image_url=None):
   <!-- HERO -->
   <tr>
     <td bgcolor="#ffffff" style="padding: 40px 40px 0;" class="pad">
-      <p class="hero-text" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 72px; font-weight: 200; color: #3a3938; margin: 0; letter-spacing: -3px; line-height: 1.0;">{h(greeting)}</p>
+      <p class="hero-text" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: {hero_size}px; font-weight: 200; color: #3a3938; margin: 0; letter-spacing: {hero_track}px; line-height: 1.0;">{h(greeting)}</p>
       <p class="hero-sub" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 18px; font-weight: 300; font-style: italic; color: #f2901c; margin: 16px 0 0; letter-spacing: 0; line-height: 1.3;">{h(subtitle)}</p>
     </td>
   </tr>
