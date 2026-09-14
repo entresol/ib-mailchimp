@@ -1,0 +1,28 @@
+typ: einladung
+
+betreff: "[neudenken] Einladung zum Neudenkertreffen am Freitag, den 18. September im Möbelkollektiv"
+vorschautext: "Die Sommerpause ist vorbei — am Freitag sehen wir uns im Möbelkollektiv."
+
+greeting: "Goeiemiddag,"
+subtitle: "Zurück aus der Sommerpause"
+
+intro:
+  - "in Bayern beginnt die Schule, damit geht die Sommerpause endgültig zu Ende. Der Rhythmus kehrt zurück, die Köpfe sind wieder da — höchste Zeit, sich wiederzusehen."
+  - "Diese Einladung kommt kurzfristig, und das hat einen Grund: Unsere beiden eigentlich geplanten Orte sind nacheinander weggefallen. Das Möbelkollektiv hat spontan die Türen geöffnet — Werkstatt, Arbeitsort und Gemeinschaftsprojekt in einem, ein Haus, in dem Dinge entstehen, weil Menschen sie gemeinsam anfassen."
+  - "Wie immer: Kein Programm, keine Agenda, Free Flow. Kommt vorbei, taucht in die Gespräche ein und bringt die Menschen mit, die ihr schon lange dazu einladen wolltet."
+
+main_event:
+  date: "Fr, 18. September"
+  time: "14–16 Uhr"
+  location_name: "Möbelkollektiv"
+  location_url: "http://moebelkollektiv.de/"
+  location_address: "Wiesenthalstr. 40, Haus C (oberstes Stockwerk), 90419 Nürnberg"
+  description: "Gespräche auf Augenhöhe zwischen Hobelbank und Kaffeetisch. Eine kurze Anmeldung vorab hilft uns beim Planen."
+
+events: []
+cta_text: ""
+cta_url: ""
+
+closing: ""
+
+team: "Annika, Doro, Hanna, Stefan, Stefan & Thor"
