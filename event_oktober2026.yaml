@@ -1,0 +1,43 @@
+typ: einladung
+
+# OFFEN: Betreff erst finalisieren, wenn der Text steht.
+betreff: "[neudenken] Einladung zum Neudenkertreffen am Freitag, den 16. Oktober im Bergbrand"
+vorschautext: ""
+
+# OFFEN: Greeting rotiert monatlich durch Sprachen. Bisher verwendet:
+#   Hola (Feb) · Selamat pagi (Jul) · Habari za mchana (Aug) · Goeiemiddag (Sep)
+# Länge steuert den Schriftgrad: ≤8 Zeichen = 72px, ≤14 = 52px, darüber 40px.
+greeting: ""
+
+# OFFEN: Stimmung/Thema des Monats, nicht den Ort wiederholen.
+subtitle: ""
+
+# OFFEN: individuell entwickeln. Der dritte Absatz ist der stehende Free-Flow-Satz.
+# Kontext Bergbrand: Spezialitäten-Kaffeerösterei, zog Mai 2026 aus der Weißgerbergasse
+# nach Wetzendorf. ~1000 qm, zwei Rösttrommeln, eigener Schulungsraum für Barista-Kurse.
+# Nur Rohkaffee ab 80/100 Punkten.
+intro:
+  - ""
+  - ""
+  - "Wie gewohnt: Kein Programm, keine Agenda, Free Flow. Kommt vorbei, taucht in die Gespräche ein und bringt die Menschen mit, die ihr schon lange dazu einladen wolltet."
+
+main_event:
+  date: "Fr, 16. Oktober"
+  time: "14–16 Uhr"
+  location_name: "Bergbrand"
+  location_url: "https://bergbrand.eu/"
+  location_address: "Hintere Dorfäckerstr. 10, 90427 Nürnberg"
+  description: ""
+
+events: []
+cta_text: ""
+cta_url: ""
+
+# OFFEN: noch kein Bildmaterial. Feld gesetzt lassen, sobald eine Datei in raw/ liegt:
+# image: raw/bergbrand.jpeg
+
+closing: ""
+
+# OFFEN: Team-Besetzung wechselt monatlich. September war:
+# André, Doro, Lea, Marcus, Stefan, Stefan, Thommy & Thor
+team: ""
