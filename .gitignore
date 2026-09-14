@@ -3,3 +3,8 @@
 __pycache__/
 *.pyc
 .DS_Store
+
+# Generierte Vorschauen (--dry-run) - kein Repo-Inhalt.
+# Die datierten preview_<monat>.html bleiben bewusst getrackt (Archiv).
+preview_draft.html
+preview_einladung.html

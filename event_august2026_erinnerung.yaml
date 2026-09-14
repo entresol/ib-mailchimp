@@ -1,0 +1,26 @@
+typ: erinnerung
+
+betreff: "[neudenken] Erinnerung zum Neudenkertreffen am 21. August in Doros Garten"
+vorschautext: "Am Freitag geht's los: Doros Garten, 15–17 Uhr, Nürnberger Nordstadt."
+
+greeting: "Habari za mchana?"
+subtitle: "Neudenkertreffen in Doros Garten"
+
+intro:
+  - "als kurze Erinnerung: wir treffen uns am Freitag in der Nürnberger Nordstadt bei Doro im Garten — mit viel Grün, etwas Kühlem im Glas und frischem Neudenken. Kein Programm, keine Agenda, Free Flow. Bringt gerne mit, wen ihr schon lange einladen wolltet."
+
+main_event:
+  date: "Fr, 21. August"
+  time: "15–17 Uhr"
+  location_name: "Doros Garten"
+  location_url: ""
+  location_address: "Grolandstr. 70, 90408 Nürnberg"
+  description: "Gespräche auf Augenhöhe, barfuß im Gras ausdrücklich erlaubt. Eine kurze Anmeldung vorab hilft uns beim Planen."
+
+events: []
+cta_text: ""
+cta_url: ""
+
+closing: ""
+
+team: "Annika, Doro, Hanna, Stefan, Stefan & Thor"
