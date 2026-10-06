@@ -30,6 +30,12 @@ Diese Punkte sind entschieden — nicht neu erfragen:
 .venv/bin/python create_campaign.py event.yaml --dry-run   # nur lokale Vorschau
 .venv/bin/python create_campaign.py event.yaml             # Entwurf + Testmail
 .venv/bin/python create_campaign.py event.yaml --test-email ""   # Entwurf ohne Testmail
+.venv/bin/python create_campaign.py event.yaml --update <id>     # Entwurf nachträglich ändern
 ```
+
+**Nachträgliche Änderungen:** YAML ändern → `--update <id>` → committen. Das Skript lädt nur
+hoch, wenn der Backend-Stand noch exakt dem committeten YAML entspricht; hat jemand im
+Backend redigiert, bricht es ab. Testmails verschickt der User selbst — Entwurf daher mit
+`--test-email ""` anlegen.
 
 Danach in der Mailchimp-UI: Preview prüfen → Share-URL-Slug setzen → senden.

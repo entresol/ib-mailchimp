@@ -6,6 +6,7 @@ Verwendung:
     python create_campaign.py event.yaml
     python create_campaign.py event.yaml --test-email you@example.com
     python create_campaign.py event.yaml --dry-run
+    python create_campaign.py event.yaml --update CAMPAIGN_ID
 """
 
 import os
@@ -426,6 +427,81 @@ def create_campaign(ev, dry_run=False):
 
     return campaign_id
 
+# --- Bestehenden Entwurf aktualisieren ---------------------------------------
+#
+# Das Backend ist die Quelle: Sobald dort jemand redigiert hat, darf ein Upload
+# aus dem YAML diese Arbeit nicht überschreiben. Deshalb wird vor dem Upload
+# geprüft, ob der Backend-Stand noch exakt dem committeten YAML (git HEAD)
+# entspricht. Ablauf: YAML ändern → --update → committen.
+
+def strip_mailchimp_footer(html):
+    """Entfernt den Pflicht-Footer, den Mailchimp beim Speichern anhängt."""
+    import re
+    return re.sub(r"<center>\s*(<br>\s*)*<table[^>]*id=\"canspamBarWrapper\".*?</center>",
+                  "", html, flags=re.S)
+
+def normalize_html(html):
+    import re
+    return re.sub(r"\s+", " ", strip_mailchimp_footer(html)).strip()
+
+def committed_event(event_path):
+    import subprocess
+    repo = Path(__file__).parent
+    rel = event_path.resolve().relative_to(repo)
+    out = subprocess.run(["git", "show", f"HEAD:{rel}"], cwd=repo,
+                         capture_output=True, text=True)
+    if out.returncode != 0:
+        print(f"{rel} ist nicht committet — ohne Vergleichsstand kein Update.")
+        sys.exit(1)
+    return yaml.safe_load(out.stdout)
+
+def update_campaign(campaign_id, ev, event_path):
+    import re
+    campaign = api("GET", f"campaigns/{campaign_id}")
+    if campaign["status"] != "save":
+        print(f"Kampagne {campaign_id} hat Status '{campaign['status']}' — nur Entwürfe werden aktualisiert.")
+        sys.exit(1)
+    remote_html = api("GET", f"campaigns/{campaign_id}/content")["html"]
+    base = committed_event(event_path)
+
+    m = re.search(r'<img src="(https://mcusercontent\.com/[^"]+)"', remote_html)
+    remote_image = m.group(1) if m else None
+    base_html = generate_html(base, image_url=remote_image if base.get("image") else None)
+
+    if normalize_html(remote_html) != normalize_html(base_html):
+        print("Abbruch: Der HTML-Inhalt im Backend weicht vom committeten YAML ab —")
+        print("dort wurde redigiert. Änderung bitte im Backend vornehmen, YAML nachziehen.")
+        sys.exit(1)
+
+    image_url = remote_image
+    if ev.get("image") != base.get("image"):
+        image_url = upload_image(Path(ev["_yaml_dir"]) / ev["image"]) if ev.get("image") else None
+    new_html = generate_html(ev, image_url=image_url)
+
+    s = campaign["settings"]
+    settings = {}
+    for key, field in (("subject_line", "betreff"), ("preview_text", "vorschautext")):
+        wanted = ev.get(field, "")
+        if wanted == s.get(key, ""):
+            continue
+        if s.get(key, "") != base.get(field, ""):
+            print(f"Abbruch: '{key}' wurde im Backend geändert ({s.get(key)!r}) — YAML nachziehen.")
+            sys.exit(1)
+        settings[key] = wanted
+        if key == "subject_line":
+            settings["title"] = wanted
+
+    if normalize_html(new_html) == normalize_html(base_html) and not settings:
+        print("Keine Änderung gegenüber dem Backend.")
+        return
+    if settings:
+        print(f"Aktualisiere Einstellungen: {', '.join(settings)}")
+        api("PATCH", f"campaigns/{campaign_id}", json={"settings": settings})
+    if normalize_html(new_html) != normalize_html(base_html):
+        print("Lade HTML hoch...")
+        api("PUT", f"campaigns/{campaign_id}/content", json={"html": new_html})
+    print(f"Kampagne {campaign_id} aktualisiert. Jetzt YAML committen.")
+
 def send_test(campaign_id, test_email):
     print(f"\nSende Testmail an {test_email}...")
     api("POST", f"campaigns/{campaign_id}/actions/test", json={
@@ -441,6 +517,8 @@ def main():
     parser.add_argument("event", help="YAML-Datei mit Veranstaltungsdaten")
     parser.add_argument("--test-email", default=DEFAULT_TEST_EMAIL, help="Empfänger der Testmail")
     parser.add_argument("--dry-run", action="store_true", help="Vorschau lokal speichern, nichts bei Mailchimp anlegen")
+    parser.add_argument("--update", metavar="CAMPAIGN_ID",
+                        help="Bestehenden Entwurf aus dem YAML aktualisieren — nur wenn im Backend nicht redigiert wurde")
     args = parser.parse_args()
 
     event_path = Path(args.event)
@@ -450,6 +528,9 @@ def main():
 
     ev = yaml.safe_load(event_path.read_text(encoding="utf-8"))
     ev["_yaml_dir"] = str(event_path.parent.resolve())
+    if args.update:
+        update_campaign(args.update, ev, event_path)
+        return
     campaign_id = create_campaign(ev, dry_run=args.dry_run)
 
     if campaign_id and args.test_email:
