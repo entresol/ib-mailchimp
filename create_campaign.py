@@ -116,22 +116,23 @@ def render_hero_event(ev):
             if loc_url else loc_name
         )
         rows = (
-            f'    <p style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 14px; '
-            f'font-weight: 500; color: #f2901c; margin: 0 0 6px; letter-spacing: 1px; '
-            f'text-transform: uppercase;">{h(eyebrow_text)}</p>\n'
-            f'    <p style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 36px; '
-            f'font-weight: 400; color: #3a3938; margin: 0 0 8px; letter-spacing: -0.8px; '
-            f'line-height: 1.15;">{loc_inner}</p>\n'
+            f'    <p class="loc-eyebrow" style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 20px; '
+            f'font-weight: 500; color: #f2901c; margin: 0 0 14px; letter-spacing: 1.5px; '
+            f'text-align: center; text-transform: uppercase;">{h(eyebrow_text)}</p>\n'
+            f'    <p class="loc-name" style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 56px; '
+            f'font-weight: 400; color: #3a3938; margin: 0 0 14px; letter-spacing: -1.5px; '
+            f'text-align: center; line-height: 1.1;">{loc_inner}</p>\n'
         )
         if loc_addr:
             rows += (
-                f'    <p style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 13px; '
-                f'color: #6b6967; margin: 0 0 10px; font-weight: 300;">{loc_addr}</p>\n'
+                f'    <p class="loc-addr" style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 18px; '
+                f'color: #6b6967; margin: 0 0 10px; text-align: center; font-weight: 300;">{loc_addr}</p>\n'
             )
-        rows += (
-            f'    <p style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 14px; '
-            f'color: #6b6967; margin: 0; line-height: 1.75; font-weight: 300;">{h(ev["description"])}</p>\n'
-        )
+        if ev.get("description"):
+            rows += (
+                f'    <p style="font-family: \'Plus Jakarta Sans\', Arial, sans-serif; font-size: 14px; '
+                f'color: #6b6967; margin: 0; line-height: 1.75; text-align: center; font-weight: 300;">{h(ev["description"])}</p>\n'
+            )
     else:
         # Kompaktes Eyebrow-Layout (Standard für Flowing Invitation)
         title_inner = (
@@ -273,6 +274,9 @@ def generate_html(ev, image_url=None):
       .email-container {{ width: 100% !important; }}
       .hero-text {{ font-size: {hero_size_m}px !important; letter-spacing: {hero_track_m}px !important; }}
       .hero-sub {{ font-size: 22px !important; }}
+      .loc-eyebrow {{ font-size: 15px !important; letter-spacing: 1px !important; }}
+      .loc-name {{ font-size: 40px !important; letter-spacing: -1px !important; }}
+      .loc-addr {{ font-size: 15px !important; }}
       .pad {{ padding: 36px 28px !important; }}
     }}
   </style>
@@ -317,7 +321,7 @@ def generate_html(ev, image_url=None):
 
   <!-- MAIN EVENT -->
   <tr>
-    <td bgcolor="#f7f6f4" style="padding: 36px 40px 40px;" class="pad">
+    <td bgcolor="#f7f6f4" style="padding: 56px 40px 28px;" class="pad">
 {main_event_html}
     </td>
   </tr>

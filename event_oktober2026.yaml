@@ -1,25 +1,15 @@
 typ: einladung
 
-# OFFEN: Betreff erst finalisieren, wenn der Text steht.
 betreff: "[neudenken] Einladung zum Neudenkertreffen am Freitag, den 16. Oktober im Bergbrand"
-vorschautext: ""
+vorschautext: "Wo Kaffee auf Zukunft trifft — am Freitag sehen wir uns im Bergbrand."
 
-# OFFEN: Greeting rotiert monatlich durch Sprachen. Bisher verwendet:
-#   Hola (Feb) · Selamat pagi (Jul) · Habari za mchana (Aug) · Goeiemiddag (Sep)
-# Länge steuert den Schriftgrad: ≤8 Zeichen = 72px, ≤14 = 52px, darüber 40px.
-greeting: ""
+greeting: "Selam,"
+subtitle: "Wo Kaffee auf Zukunft trifft"
 
-# OFFEN: Stimmung/Thema des Monats, nicht den Ort wiederholen.
-subtitle: ""
-
-# OFFEN: individuell entwickeln. Der dritte Absatz ist der stehende Free-Flow-Satz.
-# Kontext Bergbrand: Spezialitäten-Kaffeerösterei, zog Mai 2026 aus der Weißgerbergasse
-# nach Wetzendorf. ~1000 qm, zwei Rösttrommeln, eigener Schulungsraum für Barista-Kurse.
-# Nur Rohkaffee ab 80/100 Punkten.
 intro:
-  - ""
-  - ""
-  - "Wie gewohnt: Kein Programm, keine Agenda, Free Flow. Kommt vorbei, taucht in die Gespräche ein und bringt die Menschen mit, die ihr schon lange dazu einladen wolltet."
+  - "im Oktober sind wir zu Gast im Bergbrand – in der neu entstandenen Kaffeerösterei in Nürnberg. Hier wird Kaffee nicht einfach nur geröstet, sondern mit viel Handwerk, Leidenschaft und Technologie neu gedacht."
+  - "Wir freuen uns auf einen Blick hinter die Kulissen, den Duft von frisch geröstetem Kaffee und inspirierende Gespräche. Jörg vom Bergbrand gibt uns eine Tour durch die Rösterei."
+  - "Wie gewohnt: Kein Programm, keine Agenda, Free Flow. Kommt vorbei, taucht mit ein und bringt die Begleitung mit, die ihr schon immer dabei haben wolltet."
 
 main_event:
   date: "Fr, 16. Oktober"
@@ -33,11 +23,8 @@ events: []
 cta_text: ""
 cta_url: ""
 
-# OFFEN: noch kein Bildmaterial. Feld gesetzt lassen, sobald eine Datei in raw/ liegt:
-# image: raw/bergbrand.jpeg
+image: raw/bergbrand.jpg
 
-closing: ""
+closing: "Wir freuen uns auf euch! Wissen ist eines der wenigen Dinge, die sich vermehren, wenn man sie teilt."
 
-# OFFEN: Team-Besetzung wechselt monatlich. September war:
-# André, Doro, Lea, Marcus, Stefan, Stefan, Thommy & Thor
-team: ""
+team: "Doro, Jörg, Marcus, Stefan, Stefan & Thor"
