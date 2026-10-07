@@ -15,7 +15,7 @@ main_event:
   date: "Fr, 16. Oktober"
   time: "13–15 Uhr"
   location_name: "Bergbrand"
-  location_url: "https://bergbrand.eu/"
+  location_url: "https://bergbrand.eu/roesterei"
   location_address: "Hintere Dorfäckerstr. 10, 90427 Nürnberg"
   description: ""
 
@@ -27,4 +27,4 @@ image: raw/bergbrand.jpg
 
 closing: "Wir freuen uns auf euch! Wissen ist eines der wenigen Dinge, die sich vermehren, wenn man sie teilt."
 
-team: "Doro, Jörg, Marcus, Stefan, Stefan & Thor"
+team: "André, Doro, Jörg, Marcus, Stefan, Stefan & Thor"
